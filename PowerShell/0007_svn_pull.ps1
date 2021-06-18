@@ -5,11 +5,13 @@ $remoteBaseDir = 'N:\repos\svn\'
 function doPull {
     param(
         $localReposDir,
-        $remoteReposDir
+        $remoteReposDir,
+        $syncRevision,
+        $localRevision
     )
 
     # ローカルリポジトリを退避
-    robocopy $localReposDir (Join-Path $PSScriptRoot "\..\repos_bk\repos_$((Get-Date).ToString('yyyyMMdd_HHmmss'))") /MIR /E /R:1
+    robocopy $localReposDir (Join-Path $PSScriptRoot "\..\repos_bk\repos_$((Get-Date).ToString('yyyyMMddHHmmss'))_r$($($syncRevision))to$($localRevision)") /MIR /E /R:1
     # リポジトリフォルダのコピーを実行
     robocopy $remoteReposDir $localReposDir /MIR /E /R:1
 }
@@ -70,20 +72,14 @@ if ($remoteRevision -eq $syncRevision) {
     
     # 前回同期化時よりもローカルリビジョンが上がっている場合、確認メッセージを入れてからPullする
     if ($syncRevision -lt $localRevision) {
-        $message = @"
-リモートが最新ですが、ローカルにもコミットしています。
-ローカル: $($syncRevision) -> $($localRevision)
-リモート: $($syncRevision) -> $($remoteRevision)
-※Pullするとローカルにコミットした内容は失われますので、データを退避するなりして備えて下さい。
-"@
-        Write-Host $message
         $objYes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "実行する"
         $objNo = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "やめておく"
         $objOptions = [System.Management.Automation.Host.ChoiceDescription[]]($objYes, $objNo)
         $objMessage = @"
-$($message)
-
-実行しますか？
+リモートが最新ですが、ローカルにもコミットしています。
+ローカル: $($syncRevision) -> $($localRevision)
+リモート: $($syncRevision) -> $($remoteRevision)
+※Pullするとローカルにコミットした内容は失われますので、データを退避するなりして備えて下さい。
 "@
         $resultVal = $host.ui.PromptForChoice('実行しますか？', $objMessage, $objOptions, 1)
         if ($resultVal -ne 0) {
@@ -94,7 +90,9 @@ $($message)
     
     # プルを実行
     doPull -localReposDir $localReposDir `
-           -remoteReposDir $remoteReposDir
+           -remoteReposDir $remoteReposDir `
+           -syncRevision $syncRevision `
+           -localRevision $localRevision
 
     # 同期化したリビジョンを更新
     updateSyncRevision -newRevision $remoteRevision
