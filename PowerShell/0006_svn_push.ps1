@@ -9,7 +9,7 @@ function doPush {
         $localReposDir,
         $remoteReposDir
     )
-    # リポジトリフォルダのコピーを実行 (念のため)
+    # リポジトリフォルダのコピーを実行
     robocopy $localReposDir $remoteReposDir /MIR /E /R:1
     
     if ($remoteBaseDir.Substring(1, 1) -eq ':') {
