@@ -1,7 +1,7 @@
-$reposName = 'testrepos'
+ï»¿$reposName = 'testrepos'
 $remoteBaseDir = 'N:\repos\svn\'
 
-# ƒvƒ‹‚ðŽÀ‘•
+# ãƒ—ãƒ«ã‚’å®Ÿè£…
 function doPull {
     param(
         $localReposDir,
@@ -10,17 +10,17 @@ function doPull {
         $localRevision
     )
 
-    # ƒ[ƒJƒ‹ƒŠƒ|ƒWƒgƒŠ‚ð‘Þ”ð
-    robocopy $localReposDir (Join-Path $PSScriptRoot "\..\repos_bk\repos_$((Get-Date).ToString('yyyyMMddHHmmss'))_r$($($syncRevision))to$($localRevision)") /MIR /E /R:1
-    # ƒŠƒ|ƒWƒgƒŠƒtƒHƒ‹ƒ_‚ÌƒRƒs[‚ðŽÀs
+    # ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒã‚¸ãƒˆãƒªã‚’é€€é¿
+    robocopy $localReposDir (Join-Path $PSScriptRoot "\..\.svnrepos_bk\.svnrepos_$((Get-Date).ToString('yyyyMMddHHmmss'))_r$($($syncRevision))to$($localRevision)") /MIR /E /R:1
+    # ãƒªãƒã‚¸ãƒˆãƒªãƒ•ã‚©ãƒ«ãƒ€ã®ã‚³ãƒ”ãƒ¼ã‚’å®Ÿè¡Œ
     robocopy $remoteReposDir $localReposDir /MIR /E /R:1
 }
 
-# ƒŠƒ|ƒWƒgƒŠ‚ÌƒŠƒrƒWƒ‡ƒ“”Ô†‚ð’²‚×‚é
-# ƒŠƒ|ƒWƒgƒŠ‚ª‚È‚¢ê‡AƒŠƒrƒWƒ‡ƒ“0‚ð•Ô‹p
+# ãƒªãƒã‚¸ãƒˆãƒªã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³ç•ªå·ã‚’èª¿ã¹ã‚‹
+# ãƒªãƒã‚¸ãƒˆãƒªãŒãªã„å ´åˆã€ãƒªãƒ“ã‚¸ãƒ§ãƒ³0ã‚’è¿”å´
 function getReposRevision {
     param(
-        $reposDir # ƒŠƒ|ƒWƒgƒŠ‚ÌƒfƒBƒŒƒNƒgƒŠ
+        $reposDir # ãƒªãƒã‚¸ãƒˆãƒªã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
     )
     if (($reposDir -ne $null) -and (Test-Path $reposDir) -eq $True) {
         return [int](Get-Content (Join-Path (Join-Path $reposDir 'db') 'current'))
@@ -29,7 +29,7 @@ function getReposRevision {
     }
 }
 
-# “¯Šú‰»‚µ‚½ƒŠƒrƒWƒ‡ƒ“‚ðXV
+# åŒæœŸåŒ–ã—ãŸãƒªãƒ“ã‚¸ãƒ§ãƒ³ã‚’æ›´æ–°
 function updateSyncRevision{
     param(
         $newRevision
@@ -38,13 +38,13 @@ function updateSyncRevision{
 }
 
 ######################################
-# ‚±‚±‚©‚çƒƒCƒ“ˆ—
+# ã“ã“ã‹ã‚‰ãƒ¡ã‚¤ãƒ³å‡¦ç†
 ######################################
 
-$localReposDir = Resolve-Path (Join-Path $PSScriptRoot \..\repos)
-$remoteReposDir = Join-Path (Join-Path $remoteBaseDir $reposName) 'repos'
+$localReposDir = Resolve-Path (Join-Path $PSScriptRoot \..\.svnrepos)
+$remoteReposDir = Join-Path $remoteBaseDir "$($reposName).svnrepos"
 
-# ƒŠƒ|ƒWƒgƒŠ‚ÌƒŠƒrƒWƒ‡ƒ“‚ð’²‚×‚é
+# ãƒªãƒã‚¸ãƒˆãƒªã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³ã‚’èª¿ã¹ã‚‹
 $localRevision = getReposRevision -reposDir $localReposDir
 $remoteRevision = getReposRevision -reposDir $remoteReposDir
 if ((Test-Path (Join-Path $PSScriptRoot \..\.syncrevision))) {
@@ -56,45 +56,45 @@ Write-Host "local  : $localRevision"
 Write-Host "remote : $remoteRevision"
 Write-Host "sync   : $syncRevision"
 
-# ‘O‰ñ“¯ŠúŽž‚ÆƒŠƒ‚[ƒgƒŠƒrƒWƒ‡ƒ“‚ª“¯‚¶ê‡Apull•s—v
+# å‰å›žåŒæœŸæ™‚ã¨ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒåŒã˜å ´åˆã€pullä¸è¦
 if ($remoteRevision -eq $syncRevision) {
-    Write-Host '‘O‰ñ“¯Šú‰»Žž‚©‚çƒŠƒ‚[ƒgƒŠƒ|ƒWƒgƒŠ‚ÉXV‚ª‚È‚¢‚½‚ßAPull‚Ì•K—v‚ª‚ ‚è‚Ü‚¹‚ñB'
+    Write-Host 'å‰å›žåŒæœŸåŒ–æ™‚ã‹ã‚‰ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒã‚¸ãƒˆãƒªã«æ›´æ–°ãŒãªã„ãŸã‚ã€Pullã®å¿…è¦ãŒã‚ã‚Šã¾ã›ã‚“ã€‚'
     exit 0
 
-# ‘O‰ñ“¯Šú‰»Žž‚æ‚è‚àƒŠƒ‚[ƒgƒŠƒrƒWƒ‡ƒ“‚ª‰º‚ª‚Á‚½ê‡Aó‘Ô‚ª•Ï
+# å‰å›žåŒæœŸåŒ–æ™‚ã‚ˆã‚Šã‚‚ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒä¸‹ãŒã£ãŸå ´åˆã€çŠ¶æ…‹ãŒå¤‰
 } elseif ($remoteRevision -lt $syncRevision) {
-    Write-Host "ó‘Ô‚ª•Ï‚Å‚·B‘O‰ñ“¯Šú‰»Žž‚æ‚è‚àƒŠƒ‚[ƒgƒŠƒ|ƒWƒgƒŠ‚ªŒÃ‚­‚È‚Á‚Ä‚¢‚Ü‚·B‘O‰ñ“¯Šú‰»Žž‚ÌƒŠƒrƒWƒ‡ƒ“:$syncRevisionAƒŠƒ‚[ƒg‚ÌƒŠƒrƒWƒ‡ƒ“:$remoteRevision"
+    Write-Host "çŠ¶æ…‹ãŒå¤‰ã§ã™ã€‚å‰å›žåŒæœŸåŒ–æ™‚ã‚ˆã‚Šã‚‚ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒã‚¸ãƒˆãƒªãŒå¤ããªã£ã¦ã„ã¾ã™ã€‚å‰å›žåŒæœŸåŒ–æ™‚ã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³:$syncRevisionã€ãƒªãƒ¢ãƒ¼ãƒˆã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³:$remoteRevision"
     exit 1
 
-# ‘O‰ñ“¯Šú‰»Œã‚ÉƒŠƒ‚[ƒgƒŠƒrƒWƒ‡ƒ“‚ªã‚ª‚Á‚½ê‡Apull‰Â”\
+# å‰å›žåŒæœŸåŒ–å¾Œã«ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒä¸ŠãŒã£ãŸå ´åˆã€pullå¯èƒ½
 } else {
-    # Write-Host 'Pull‰Â”\‚Å‚·B'
+    # Write-Host 'Pullå¯èƒ½ã§ã™ã€‚'
     
-    # ‘O‰ñ“¯Šú‰»Žž‚æ‚è‚àƒ[ƒJƒ‹ƒŠƒrƒWƒ‡ƒ“‚ªã‚ª‚Á‚Ä‚¢‚éê‡AŠm”FƒƒbƒZ[ƒW‚ð“ü‚ê‚Ä‚©‚çPull‚·‚é
+    # å‰å›žåŒæœŸåŒ–æ™‚ã‚ˆã‚Šã‚‚ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒä¸ŠãŒã£ã¦ã„ã‚‹å ´åˆã€ç¢ºèªãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å…¥ã‚Œã¦ã‹ã‚‰Pullã™ã‚‹
     if ($syncRevision -lt $localRevision) {
-        $objYes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "ŽÀs‚·‚é"
-        $objNo = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "‚â‚ß‚Ä‚¨‚­"
+        $objYes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "å®Ÿè¡Œã™ã‚‹"
+        $objNo = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "ã‚„ã‚ã¦ãŠã"
         $objOptions = [System.Management.Automation.Host.ChoiceDescription[]]($objYes, $objNo)
         $objMessage = @"
-ƒŠƒ‚[ƒg‚ªÅV‚Å‚·‚ªAƒ[ƒJƒ‹‚É‚àƒRƒ~ƒbƒg‚µ‚Ä‚¢‚Ü‚·B
-ƒ[ƒJƒ‹: $($syncRevision) -> $($localRevision)
-ƒŠƒ‚[ƒg: $($syncRevision) -> $($remoteRevision)
-¦Pull‚·‚é‚Æƒ[ƒJƒ‹‚ÉƒRƒ~ƒbƒg‚µ‚½“à—e‚ÍŽ¸‚í‚ê‚Ü‚·‚Ì‚ÅAƒf[ƒ^‚ð‘Þ”ð‚·‚é‚È‚è‚µ‚Ä”õ‚¦‚Ä‰º‚³‚¢B
+ãƒªãƒ¢ãƒ¼ãƒˆãŒæœ€æ–°ã§ã™ãŒã€ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚‚ã‚³ãƒŸãƒƒãƒˆã—ã¦ã„ã¾ã™ã€‚
+ãƒ­ãƒ¼ã‚«ãƒ«: $($syncRevision) -> $($localRevision)
+ãƒªãƒ¢ãƒ¼ãƒˆ: $($syncRevision) -> $($remoteRevision)
+â€»Pullã™ã‚‹ã¨ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚³ãƒŸãƒƒãƒˆã—ãŸå†…å®¹ã¯å¤±ã‚ã‚Œã¾ã™ã®ã§ã€ãƒ‡ãƒ¼ã‚¿ã‚’é€€é¿ã™ã‚‹ãªã‚Šã—ã¦å‚™ãˆã¦ä¸‹ã•ã„ã€‚
 "@
-        $resultVal = $host.ui.PromptForChoice('ŽÀs‚µ‚Ü‚·‚©H', $objMessage, $objOptions, 1)
+        $resultVal = $host.ui.PromptForChoice('å®Ÿè¡Œã—ã¾ã™ã‹ï¼Ÿ', $objMessage, $objOptions, 1)
         if ($resultVal -ne 0) {
-            Write-Host "ˆ—‚ª’†’f‚³‚ê‚Ü‚µ‚½B"
+            Write-Host "å‡¦ç†ãŒä¸­æ–­ã•ã‚Œã¾ã—ãŸã€‚"
             exit 0
         }
     }
     
-    # ƒvƒ‹‚ðŽÀs
+    # ãƒ—ãƒ«ã‚’å®Ÿè¡Œ
     doPull -localReposDir $localReposDir `
            -remoteReposDir $remoteReposDir `
            -syncRevision $syncRevision `
            -localRevision $localRevision
 
-    # “¯Šú‰»‚µ‚½ƒŠƒrƒWƒ‡ƒ“‚ðXV
+    # åŒæœŸåŒ–ã—ãŸãƒªãƒ“ã‚¸ãƒ§ãƒ³ã‚’æ›´æ–°
     updateSyncRevision -newRevision $remoteRevision
 
     exit 0

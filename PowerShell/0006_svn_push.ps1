@@ -1,7 +1,7 @@
-$reposName = 'testrepos'
+ï»¿$reposName = 'testrepos'
 $remoteBaseDir = 'N:\repos\svn\'
 
-# ƒvƒbƒVƒ…‚ðŽÀ‘•
+# ãƒ—ãƒƒã‚·ãƒ¥ã‚’å®Ÿè£…
 function doPush {
     param(
         $reposName,
@@ -9,7 +9,7 @@ function doPush {
         $localReposDir,
         $remoteReposDir
     )
-    # ƒŠƒ|ƒWƒgƒŠƒtƒHƒ‹ƒ_‚ÌƒRƒs[‚ðŽÀs
+    # ãƒªãƒã‚¸ãƒˆãƒªãƒ•ã‚©ãƒ«ãƒ€ã®ã‚³ãƒ”ãƒ¼ã‚’å®Ÿè¡Œ (å¿µã®ãŸã‚)
     robocopy $localReposDir $remoteReposDir /MIR /E /R:1
     
     if ($remoteBaseDir.Substring(1, 1) -eq ':') {
@@ -18,9 +18,9 @@ function doPush {
         $remoteReposSvnPath = 'file:' + ($remoteReposDir -replace '\\', '/') + '/trunk'
     }
 
-    # TortoiseSvn‚ÌRepository Browser‚ÌƒVƒ‡[ƒgƒJƒbƒg‚ðì¬
+    # TortoiseSvnã®Repository Browserã®ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ä½œæˆ
     $wshShell = New-Object -ComObject WScript.Shell
-    $linkPath = Join-Path (Join-Path $remoteBaseDir $reposName) ($reposName + '(SVN).lnk')
+    $linkPath = Join-Path $remoteBaseDir "$($reposName).lnk"
     $shortcut = $wshShell.CreateShortcut($linkPath)
     $shortcut.TargetPath = "`"C:\Program Files\TortoiseSVN\bin\TortoiseProc.exe`""
     $shortcut.Arguments = "/command:repobrowser /path:`"$($remoteReposSvnPath)`""
@@ -29,11 +29,11 @@ function doPush {
     $shortcut.Save()
 }
 
-# ƒŠƒ|ƒWƒgƒŠ‚ÌƒŠƒrƒWƒ‡ƒ“”Ô†‚ð’²‚×‚é
-# ƒŠƒ|ƒWƒgƒŠ‚ª‚È‚¢ê‡AƒŠƒrƒWƒ‡ƒ“0‚ð•Ô‹p
+# ãƒªãƒã‚¸ãƒˆãƒªã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³ç•ªå·ã‚’èª¿ã¹ã‚‹
+# ãƒªãƒã‚¸ãƒˆãƒªãŒãªã„å ´åˆã€ãƒªãƒ“ã‚¸ãƒ§ãƒ³0ã‚’è¿”å´
 function getReposRevision {
     param(
-        $reposDir # ƒŠƒ|ƒWƒgƒŠ‚ÌƒfƒBƒŒƒNƒgƒŠ
+        $reposDir # ãƒªãƒã‚¸ãƒˆãƒªã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
     )
     if (($reposDir -ne $null) -and (Test-Path $reposDir) -eq $True) {
         return [int](Get-Content (Join-Path (Join-Path $reposDir 'db') 'current'))
@@ -43,7 +43,7 @@ function getReposRevision {
 }
 
 
-# “¯Šú‰»‚µ‚½ƒŠƒrƒWƒ‡ƒ“‚ðXV
+# åŒæœŸåŒ–ã—ãŸãƒªãƒ“ã‚¸ãƒ§ãƒ³ã‚’æ›´æ–°
 function updateSyncRevision{
     param(
         $newRevision
@@ -52,13 +52,13 @@ function updateSyncRevision{
 }
 
 ######################################
-# ‚±‚±‚©‚çƒƒCƒ“ˆ—
+# ã“ã“ã‹ã‚‰ãƒ¡ã‚¤ãƒ³å‡¦ç†
 ######################################
 
-$localReposDir = Resolve-Path (Join-Path $PSScriptRoot \..\repos)
-$remoteReposDir = Join-Path (Join-Path $remoteBaseDir $reposName) 'repos'
+$localReposDir = Resolve-Path (Join-Path $PSScriptRoot \..\.svnrepos)
+$remoteReposDir = Join-Path $remoteBaseDir "$($reposName).svnrepos"
 
-# ƒŠƒ|ƒWƒgƒŠ‚ÌƒŠƒrƒWƒ‡ƒ“‚ð’²‚×‚é
+# ãƒªãƒã‚¸ãƒˆãƒªã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³ã‚’èª¿ã¹ã‚‹
 $localRevision = getReposRevision -reposDir $localReposDir
 $remoteRevision = getReposRevision -reposDir $remoteReposDir
 if ((Test-Path (Join-Path $PSScriptRoot \..\.syncrevision))) {
@@ -70,42 +70,42 @@ Write-Host "local  : $localRevision"
 Write-Host "remote : $remoteRevision"
 Write-Host "sync   : $syncRevision"
 
-# ‘O‰ñ“¯ŠúŽž‚©‚çƒ[ƒJƒ‹ƒŠƒrƒWƒ‡ƒ“‚ª“¯‚¶ê‡Apush•s—v
+# å‰å›žåŒæœŸæ™‚ã‹ã‚‰ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒåŒã˜å ´åˆã€pushä¸è¦
 if ($localRevision -eq $syncRevision) {
-    Write-Host '‘O‰ñ“¯Šú‰»Žž‚©‚çƒ[ƒJƒ‹ƒŠƒ|ƒWƒgƒŠ‚ÉXV‚ª‚È‚¢‚½‚ßAPush‚Ì•K—v‚ª‚ ‚è‚Ü‚¹‚ñB'
+    Write-Host 'å‰å›žåŒæœŸåŒ–æ™‚ã‹ã‚‰ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒã‚¸ãƒˆãƒªã«æ›´æ–°ãŒãªã„ãŸã‚ã€Pushã®å¿…è¦ãŒã‚ã‚Šã¾ã›ã‚“ã€‚'
     exit 0
 
-# ‘O‰ñ“¯Šú‰»Žž‚æ‚è‚àƒ[ƒJƒ‹ƒŠƒrƒWƒ‡ƒ“‚ª‰º‚ª‚Á‚½ê‡Aó‘Ô‚ª•Ï
+# å‰å›žåŒæœŸåŒ–æ™‚ã‚ˆã‚Šã‚‚ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒä¸‹ãŒã£ãŸå ´åˆã€çŠ¶æ…‹ãŒå¤‰
 } elseif ($localRevision -lt $syncRevision) {
-    Write-Host "ó‘Ô‚ª•Ï‚Å‚·B‘O‰ñ“¯Šú‰»Žž‚æ‚è‚àƒ[ƒJƒ‹ƒŠƒ|ƒWƒgƒŠ‚ªŒÃ‚­‚È‚Á‚Ä‚¢‚Ü‚·B‘O‰ñ“¯Šú‰»Žž‚ÌƒŠƒrƒWƒ‡ƒ“:$syncRevisionAƒ[ƒJƒ‹‚ÌƒŠƒrƒWƒ‡ƒ“:$localRevision"
+    Write-Host "çŠ¶æ…‹ãŒå¤‰ã§ã™ã€‚å‰å›žåŒæœŸåŒ–æ™‚ã‚ˆã‚Šã‚‚ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒã‚¸ãƒˆãƒªãŒå¤ããªã£ã¦ã„ã¾ã™ã€‚å‰å›žåŒæœŸåŒ–æ™‚ã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³:$syncRevisionã€ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³:$localRevision"
     exit 1
 
-# ‘O‰ñ“¯Šú‰»Œã‚Éƒ[ƒJƒ‹ƒŠƒrƒWƒ‡ƒ“‚ªã‚ª‚Á‚½ê‡Apush‰Â”\
+# å‰å›žåŒæœŸåŒ–å¾Œã«ãƒ­ãƒ¼ã‚«ãƒ«ãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒä¸ŠãŒã£ãŸå ´åˆã€pushå¯èƒ½
 } else {
-    # Write-Host 'Push‰Â”\‚Å‚·B'
+    # Write-Host 'Pushå¯èƒ½ã§ã™ã€‚'
     
-    # ‘O‰ñ“¯Šú‰»Žž‚æ‚è‚àƒŠƒ‚[ƒgƒŠƒrƒWƒ‡ƒ“‚ªã‚ª‚Á‚Ä‚¢‚éê‡
+    # å‰å›žåŒæœŸåŒ–æ™‚ã‚ˆã‚Šã‚‚ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒä¸ŠãŒã£ã¦ã„ã‚‹å ´åˆ
     if ($syncRevision -lt $remoteRevision) {
-        Write-Host 'ƒŠƒ‚[ƒg‚ªÅV‚Å‚·Bæ‚ÉPull‚µ‚Ä‰º‚³‚¢B'
-        Write-Host '¦Pull‚·‚é‚Æƒ[ƒJƒ‹‚ÉƒRƒ~ƒbƒg‚µ‚½“à—e‚ÍŽ¸‚í‚ê‚Ü‚·‚Ì‚ÅAƒf[ƒ^‚ð‘Þ”ð‚·‚é‚È‚è‚µ‚Ä”õ‚¦‚Ä‰º‚³‚¢B'
+        Write-Host 'ãƒªãƒ¢ãƒ¼ãƒˆãŒæœ€æ–°ã§ã™ã€‚å…ˆã«Pullã—ã¦ä¸‹ã•ã„ã€‚'
+        Write-Host 'â€»Pullã™ã‚‹ã¨ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚³ãƒŸãƒƒãƒˆã—ãŸå†…å®¹ã¯å¤±ã‚ã‚Œã¾ã™ã®ã§ã€ãƒ‡ãƒ¼ã‚¿ã‚’é€€é¿ã™ã‚‹ãªã‚Šã—ã¦å‚™ãˆã¦ä¸‹ã•ã„ã€‚'
         exit 0
 
-    # ‘O‰ñ“¯Šú‰»Žž‚æ‚è‚àƒŠƒ‚[ƒgƒŠƒrƒWƒ‡ƒ“‚ª‰º‚ª‚Á‚Ä‚¢‚éê‡
+    # å‰å›žåŒæœŸåŒ–æ™‚ã‚ˆã‚Šã‚‚ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒä¸‹ãŒã£ã¦ã„ã‚‹å ´åˆ
     } elseif ($syncRevision -gt $remoteRevision) {
-        Write-Host "ó‘Ô‚ª•Ï‚Å‚·B‘O‰ñ“¯ŠúŽž‚æ‚è‚àƒŠƒ‚[ƒgƒŠƒ|ƒWƒgƒŠ‚ªŒÃ‚­‚È‚Á‚Ä‚¢‚Ü‚·B‘O‰ñ“¯Šú‰»Žž‚ÌƒŠƒrƒWƒ‡ƒ“:$syncRevisionAƒŠƒ‚[ƒg‚ÌƒŠƒrƒWƒ‡ƒ“:$remoteRevision"
+        Write-Host "çŠ¶æ…‹ãŒå¤‰ã§ã™ã€‚å‰å›žåŒæœŸæ™‚ã‚ˆã‚Šã‚‚ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒã‚¸ãƒˆãƒªãŒå¤ããªã£ã¦ã„ã¾ã™ã€‚å‰å›žåŒæœŸåŒ–æ™‚ã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³:$syncRevisionã€ãƒªãƒ¢ãƒ¼ãƒˆã®ãƒªãƒ“ã‚¸ãƒ§ãƒ³:$remoteRevision"
         exit 1
 
-    # ‘O‰ñ“¯Šú‰»Žž‚ÆƒŠƒ‚[ƒgƒŠƒrƒWƒ‡ƒ“‚ª“¯‚¶ê‡
+    # å‰å›žåŒæœŸåŒ–æ™‚ã¨ãƒªãƒ¢ãƒ¼ãƒˆãƒªãƒ“ã‚¸ãƒ§ãƒ³ãŒåŒã˜å ´åˆ
     } else {
-        # Write-Host 'Push‰Â”\‚Å‚·B'
+        # Write-Host 'Pushå¯èƒ½ã§ã™ã€‚'
         
-        # ƒvƒbƒVƒ…‚ðŽÀs
+        # ãƒ—ãƒƒã‚·ãƒ¥ã‚’å®Ÿè¡Œ
         doPush -reposName $reposName `
                -remoteBaseDir $remoteBaseDir `
                -localReposDir $localReposDir `
                -remoteReposDir $remoteReposDir
 
-        # “¯Šú‰»‚µ‚½ƒŠƒrƒWƒ‡ƒ“‚ðXV
+        # åŒæœŸåŒ–ã—ãŸãƒªãƒ“ã‚¸ãƒ§ãƒ³ã‚’æ›´æ–°
         updateSyncRevision -newRevision $localRevision
     }
 }
