@@ -35,12 +35,12 @@ Private Property Get clsHuman_Age() As Integer
     clsHuman_Age = f_age
 End Property
 
-' サブプロシージャ: Greetの実装
+' Subプロシージャ: Greetの実装
 Private Sub clsHuman_Greet()
     Debug.Print "やぁ！僕の名前は " & f_name & " だよ。"
 End Sub
 
-' ファンクション: GetInfoの実装
+' Functionプロシージャ: GetInfoの実装
 Private Function clsHuman_GetInfo() As String
     clsHuman_GetInfo = "{""man"": {""name"":""" & f_name & """, ""age"":""" & CStr(f_age) & """}}"
 End Function

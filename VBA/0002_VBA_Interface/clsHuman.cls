@@ -9,8 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-'Class name: clsHuman
-
 Public Name As String
 Public Age As Integer
 Public Sub Greet(): End Sub
