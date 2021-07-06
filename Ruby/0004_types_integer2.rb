@@ -11,3 +11,10 @@ puts num1
 puts num2
 puts num3
 puts num4
+
+# --------------------------------- output
+# $ ruby 0004_types_integer2.rb 
+# 9999
+# 65535
+# 511
+# 196

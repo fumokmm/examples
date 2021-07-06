@@ -6,3 +6,10 @@ puts bool1
 puts bool2
 puts bool1.class == TrueClass
 puts bool2.class == FalseClass
+
+# --------------------------------- output
+# $ ruby 0006_types_boolean.rb 
+# true
+# false
+# true
+# true

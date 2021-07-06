@@ -9,3 +9,9 @@ num3 = 1_234_000
 puts num1
 puts num2
 puts num3
+
+# --------------------------------- output
+# $ ruby 0003_types_integer.rb 
+# 1234
+# -1234
+# 1234000
