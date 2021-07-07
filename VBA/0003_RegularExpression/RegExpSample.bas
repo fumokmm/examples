@@ -7,7 +7,7 @@ Public Function searchCCC(rng As Range) As String
     Dim re, reMatch As Object
     Set re = CreateObject("VBScript.RegExp")
     With re
-        .Pattern = "^Åy(.+)Åz(.+)_(.+)_(.+)$"
+        .Pattern = "^„Äê(.+)„Äë(.+)_(.+)_(.+)$"
         .IgnoreCase = False
         .Global = True
         Set reMatch = .Execute(rng)
