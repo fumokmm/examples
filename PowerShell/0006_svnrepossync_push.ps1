@@ -48,7 +48,7 @@ function updateSyncRevision{
     param(
         $newRevision
     )
-    Set-Content -Path (Join-Path $PSScriptRoot \..\.syncrevision) -Value $newRevision
+    Set-Content -Path (Join-Path $PSScriptRoot \..\.svnrepossyncrevision) -Value $newRevision
 }
 
 ######################################
@@ -61,8 +61,8 @@ $remoteReposDir = Join-Path $remoteBaseDir "$($reposName).svnrepos"
 # リポジトリのリビジョンを調べる
 $localRevision = getReposRevision -reposDir $localReposDir
 $remoteRevision = getReposRevision -reposDir $remoteReposDir
-if ((Test-Path (Join-Path $PSScriptRoot \..\.syncrevision))) {
-    $syncRevision = [int](Get-Content (Join-Path $PSScriptROot \..\.syncrevision))
+if ((Test-Path (Join-Path $PSScriptRoot \..\.svnrepossyncrevision))) {
+    $syncRevision = [int](Get-Content (Join-Path $PSScriptROot \..\.svnrepossyncrevision))
 } else {
     $syncRevision = [int]0
 }
