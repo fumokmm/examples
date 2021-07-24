@@ -52,7 +52,7 @@ $remoteReposDir = Join-Path $remoteBaseDir "$($reposName).svnrepos"
 $localRevision = getReposRevision -reposDir $localReposDir
 $remoteRevision = getReposRevision -reposDir $remoteReposDir
 if ((Test-Path (Join-Path $PSScriptRoot \..\.svnrepossyncrevision))) {
-    $syncRevision = [int](Get-Content (Join-Path $PSScriptROot \..\.svnrepossyncrevision))
+    $syncRevision = [int](Get-Content (Join-Path $PSScriptRoot \..\.svnrepossyncrevision))
 } else {
     $syncRevision = [int]0
 }
