@@ -1,4 +1,4 @@
-﻿$reposName = 'testrepos'
+﻿$reposName = 'svnrepossync'
 $remoteBaseDir = 'N:\repos\svn\'
 
 # プッシュを実装

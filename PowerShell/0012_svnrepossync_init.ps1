@@ -1,5 +1,15 @@
 ﻿# 引数1: リポジトリ名
 $reposName = $args[0]
+function usage {
+    Write-Host "Usage: $($Script:MyInvocation.MyCommand.Name) <リポジトリ名>"
+    exit 1
+}
+if ($args.Count -eq 1) {
+    $reposName = $args[0]
+} else {
+    usage
+}
+
 $reposBaseDir = Join-Path $PSScriptRoot $reposName
 $remoteBaseDir = 'N:\repos\svn\'
 #$remoteBaseDir = '\\192.168.3.5\share\repos\svn\' # サーバ名で指定
@@ -7,7 +17,7 @@ $remoteBaseDir = 'N:\repos\svn\'
 # リポジトリディレクトリが既にある場合は処理終了
 if (Test-Path $reposBaseDir) {
     Write-Host "$($reposBaseDir)が既に存在します。"
-    exit -1
+    exit 1
 }
 
 # フォルダ作成
@@ -34,14 +44,14 @@ svn mkdir $svnURLDefaultPaths -m "initial commit."
 
 # テンプレートリポジトリからスクリプトファイルをエクスポートしコミット
 if ($remoteBaseDir -match ':') {
-    $svnURLtemplate = ($svnUrlBaseLocal + $remoteBaseDir + 'svnrepossync_template.svnrepos') -replace '\\', '/'
+    $svnURLtemplate = ($svnUrlBaseLocal + $remoteBaseDir + 'svnrepossync.svnrepos') -replace '\\', '/'
 } else {
-    $svnURLtemplate = ($svnUrlBaseServer + $remoteBaseDir + 'svnrepossync_template.svnrepos') -replace '\\', '/'
+    $svnURLtemplate = ($svnUrlBaseServer + $remoteBaseDir + 'svnrepossync.svnrepos') -replace '\\', '/'
 }
 $tmpDir = Join-Path $PSScriptRoot "tmp_$((Get-Date).ToString('yyyyMMddHHmmss'))"
-svn export "`"$($svnURLtemplate)/trunk/scripts`"" $tmpDir
+svn export "`"$($svnURLtemplate)/scripts`"" $tmpDir
 # エクスポートしたスクリプト内の $reposName変数の値を置換
-foreach ($pp in '0006_svnrepossync_push.ps1', '0007_svnrepossync_fetch.ps1') {
+foreach ($pp in 'push.ps1', 'fetch.ps1') {
     $contents = (Get-Content (Join-Path $tmpDir $pp)) -creplace "\`$reposName = 'testrepos'", "`$reposName = '$($reposName)'"
     $contents | Out-File (Join-Path $tmpDir $pp)
 }
