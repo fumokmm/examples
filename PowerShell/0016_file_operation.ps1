@@ -8,10 +8,14 @@ Copy-Item -Path C:\temp\test.txt -Destination C:\temp\test2.txt
 Copy-Item -Path C:\temp\test.txt -Destination C:\temp\test3.txt -Force
 
 # ファイル移動
+# Move-Item -Path <移動元パス> -Destination <移動先パス>
+# Move-Item -Path <移動元パス> -Destination <移動先パス> -Force
 # ref. https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/move-item
 Move-Item -Path C:\temp\test.txt -Destination C:\temp\bk\test.txt
 # -Forceは上書き
 Move-Item -Path C:\temp\test.txt -Destination C:\temp\bk\test.txt -Force
+# リネームする
+Move-Item -Path C:\temp\test.txt -Destination C:\temp\test2.txt
 # リネームしつつ移動
 Move-Item -Path C:\temp\test.txt -Destination C:\temp\bk\test2.txt
 # ファイルを別のフォルダに移動
