@@ -1,6 +1,7 @@
 ﻿Set-PSDebug -strict
 
 # cf) https://powershellmagazine.com/2013/05/20/converting-to-size-units-kb-mbgbtb-and-pb-without-using-powershell-multipliers/
+# cf) https://devblogs.microsoft.com/scripting/formatting-powershell-decimal-places/
 Write-Host "1KB = $(1KB.ToString('#,#'))バイト"
 Write-Host "1MB = $(1MB.ToString('#,#'))バイト"
 Write-Host "1GB = $(1GB.ToString('#,#'))バイト"
