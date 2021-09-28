@@ -1,0 +1,8 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+def runSampleNum = 1
+def sampleMainClass = [
+    1: 'sample0001arraycast.Main'
+]
+mainClassName = sampleMainClass[runSampleNum]
